@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCoreHelloWorld", "DotCoreHelloWorld\DotCoreHelloWorld.csproj", "{D54947EB-20B7-48B0-93F7-DF537694B6D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{510B8E73-9895-431C-A9B7-61C9EC4F3087}"
+	ProjectSection(SolutionItems) = preProject
+		manifest.yml = manifest.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
