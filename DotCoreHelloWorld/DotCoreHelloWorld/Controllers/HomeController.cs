@@ -5,14 +5,43 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DotCoreHelloWorld.Models;
+using System.Net.Http;
+using System.Threading;
 
-namespace DotCoreHelloWorld.Controllers
+using System.Net;
+
+
+
+
+namespace DotCoreHelloWorld
 {
+    public class Product
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
+
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            return View();
+            List<Product> products = GetProducts().Result.ToList<Product>();
+            return View(products);
+        }
+
+        public async Task<List<Product>> GetProducts()
+        {
+            List<Product> p = null;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://products-api.cfapps.io/");
+
+            HttpResponseMessage result = await client.GetAsync("api/Product");
+            if (result.IsSuccessStatusCode)
+            {
+                p = await result.Content.ReadAsAsync<List<Product>>();
+            }
+            return p;
         }
 
         public IActionResult About()
