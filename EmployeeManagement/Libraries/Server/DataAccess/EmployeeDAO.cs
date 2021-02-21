@@ -1,4 +1,5 @@
 ﻿using EmployeeManagement.Common;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,11 +12,11 @@ namespace EmployeeManagement.Server
 {
     public class EmployeeDAO : IEmployeeDAO
     {
-        public bool AddEmployee(EmployeeInfo employeeInfo)
+        IConfiguration _configuration;
+        public EmployeeDAO(IConfiguration configuration )
         {
-            throw new NotImplementedException();
+            _configuration = configuration;
         }
-
         public bool DeleteEmployee(long id)
         {
             throw new NotImplementedException();
@@ -23,7 +24,27 @@ namespace EmployeeManagement.Server
 
         public DataTable GetEmployee(long id)
         {
-            throw new NotImplementedException();
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("AzSQLServerConnection")))
+                {
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("GetEmployee", connection))
+                    {
+                        sqlDataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+                        sqlDataAdapter.SelectCommand.Parameters.Add("@Id", SqlDbType.BigInt).Value = id;
+                        sqlDataAdapter.Fill(dataTable);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw;
+            }
+
+
+            return dataTable;
         }
 
         public DataTable GetEmployees()
@@ -32,7 +53,7 @@ namespace EmployeeManagement.Server
 
             try
             {
-                using (SqlConnection connection = new SqlConnection("Server=tcp:azemployeemanagement.database.windows.net,1433;Initial Catalog=employeemanagement;Persist Security Info=False;User ID=kravisha;Password=Samsung1234$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
+                using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("AzSQLServerConnection")))
                 {
                     using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("GetEmployees", connection))
                     {
@@ -50,9 +71,32 @@ namespace EmployeeManagement.Server
             return dataTable;
         }
 
-        public bool UpdateEmployee(EmployeeInfo employeeInfo)
+        public bool AddOrUpdateEmployeeInfo(EmployeeInfo employeeInfo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("AzSQLServerConnection")))
+                {
+                    using (SqlCommand command = new SqlCommand("UpsertEmployeeInfo", connection))
+                    {
+                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add("@Id", SqlDbType.BigInt).Value = employeeInfo.Id;
+                        command.Parameters.Add("@Name", SqlDbType.NVarChar,50).Value = employeeInfo.Name;
+                        command.Parameters.Add("@Department", SqlDbType.NVarChar, 20).Value = employeeInfo.Department;
+                        command.Parameters.Add("@Designation", SqlDbType.NVarChar, 20).Value = employeeInfo.Designation;
+                        command.Parameters.Add("@PhotoPath", SqlDbType.NVarChar, 255).Value = employeeInfo.PhotoPath;
+                        command.Parameters.Add("@JoinDate", SqlDbType.DateTime).Value = employeeInfo.JoinDate.Date;
+                        command.ExecuteNonQuery();
+                        return true;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                //throw;
+                return false;
+            }
         }
     }
 }

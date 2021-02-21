@@ -16,10 +16,7 @@ namespace EmployeeManagement.Server
         {
             _employeeDAO = employeeDAO;
         }
-        public bool AddEmployee(EmployeeInfo employeeInfo)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public bool DeleteEmployee(long id)
         {
@@ -28,7 +25,27 @@ namespace EmployeeManagement.Server
 
         public EmployeeInfo GetEmployee(long id)
         {
-            throw new NotImplementedException();
+            EmployeeInfo employee= new EmployeeInfo();
+            //return new List<EmployeeInfo> { new EmployeeInfo { Id=1, Department="FR", Designation="Lead Developer", Name="Ravi K", PhotoPath=@"straoge\container\blob"  } };
+            using (DataTableReader dtr = _employeeDAO.GetEmployee(id).CreateDataReader())
+            {
+                while (dtr.Read())
+                {
+
+                    employee = new EmployeeInfo
+                    {
+                        Id = Convert.ToInt64(dtr["Id"]),
+                        Name = Convert.ToString(dtr["Name"]),
+                        Department = Convert.ToString(dtr["Department"]),
+                        Designation = Convert.ToString(dtr["Designation"]),
+                        JoinDate = Convert.ToDateTime(dtr["JoinDate"]),
+                        LastUpdated = Convert.ToDateTime(dtr["LastUpdated"]),
+                        PhotoPath = Convert.ToString(dtr["PhotoPath"])
+                    };
+
+                }
+            }
+            return employee;
         }
 
         public List<EmployeeInfo> GetEmployees()
@@ -56,9 +73,9 @@ namespace EmployeeManagement.Server
             return employees;
         }
 
-        public bool UpdateEmployee(EmployeeInfo employeeInfo)
+        public bool AddOrUpdateEmployeeInfo(EmployeeInfo employeeInfo)
         {
-            throw new NotImplementedException();
+            return _employeeDAO.AddOrUpdateEmployeeInfo(employeeInfo);
         }
     }
 }

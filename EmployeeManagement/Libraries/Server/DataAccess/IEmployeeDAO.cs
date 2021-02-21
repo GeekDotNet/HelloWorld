@@ -14,10 +14,9 @@ namespace EmployeeManagement.Server
 
         public DataTable GetEmployee(long id);
 
-        public bool AddEmployee(EmployeeInfo employeeInfo);
+        public bool AddOrUpdateEmployeeInfo(EmployeeInfo employeeInfo);
 
         public bool DeleteEmployee(long id);
 
-        public bool UpdateEmployee(EmployeeInfo employeeInfo);
     }
 }

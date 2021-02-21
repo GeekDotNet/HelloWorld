@@ -1,0 +1,89 @@
+﻿@page
+@model EmployeeManagement.Web.Pages.Employee.UpsertModel
+
+@{
+    ViewData["Title"] = "Upsert";
+}
+
+
+<br />
+<h2 class="text-info">@(Model.Employee.Id!=0? "Edit": "Create") Book</h2>
+<br />
+
+<div class="border container" style="padding:30px">
+    <form method="post">
+        @if (@Model.Employee.Id != 0)
+        {
+            <input type="hidden" asp-for="Employee.Id" />
+        }
+        <div class="text-danger" asp-validation-summary="ModelOnly">
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Employee.Name"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Employee.Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Employee.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Employee.Department"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Employee.Department" class="form-control" />
+            </div>
+            <span asp-validation-for="Employee.Department" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Employee.Designation"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Employee.Designation" class="form-control" />
+            </div>
+            <span asp-validation-for="Employee.Designation" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Employee.JoinDate"></label>
+            </div>
+            <div class="col-6">
+                <input type="date" asp-for="Employee.JoinDate" class="form-control" />
+            </div>
+            <span asp-validation-for="Employee.JoinDate" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Employee.PhotoPath"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Employee.PhotoPath" class="form-control" />
+            </div>
+            <span asp-validation-for="Employee.PhotoPath" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-2">
+                @*<input type="submit" value="Update" class="btn btn-primary form-control" />*@
+                <button type="submit" class="btn btn-outline-primary form-control">@(Model.Employee.Id!=0? "Update": "Create")</button>
+            </div>
+            <div class="col-3">
+                <a asp-page="index" class="btn btn-success form-control">Back to List</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@*Client Validation *@
+
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial.cshtml" />
+}
+
+
+

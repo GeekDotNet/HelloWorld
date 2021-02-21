@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using EmployeeManagement.Common;
 using EmployeeManagement.Server;
 using Microsoft.AspNetCore.Builder;
@@ -34,8 +35,12 @@ namespace WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
             });
-            services.AddTransient(typeof(IEmployeeManager), typeof(EmployeeManager));
+            services.AddTransient<IEmployeeManager, EmployeeManager>();
             services.AddTransient(typeof(IEmployeeDAO), typeof(EmployeeDAO));
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped(x => new BlobServiceClient(Configuration.GetValue<string>("AzBlogStorageConnection")));
+
+
 
         }
 
@@ -45,9 +50,10 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
+
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
 
             app.UseHttpsRedirection();
 
@@ -58,6 +64,7 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

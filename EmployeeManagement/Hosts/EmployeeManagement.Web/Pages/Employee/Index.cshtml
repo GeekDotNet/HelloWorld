@@ -1,0 +1,110 @@
+﻿@page
+@model EmployeeManagement.Web.Pages.Employee.IndexModel
+@{
+}
+
+
+<br />
+
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Employee Info</h2>
+    </div>
+    <div class="col-3">
+        <a asp-page="Create" class="btn btn-info form-control text-white">Add New Employee</a>
+    </div>
+
+
+    <div class="col-12 p-3 m-3">
+        <form method="post">
+            @if (Model.Employees.Count() > 0)
+            {
+                <table class="table table-striped bordered">
+                    <tr class="table-secondary">
+
+                        <th>
+                            <label asp-for="Employees.FirstOrDefault().Id"></label>
+                        </th>
+                        <th>
+                            <label asp-for="Employees.FirstOrDefault().Name"></label>
+                        </th>
+                        <th>
+                            <label asp-for="Employees.FirstOrDefault().Department"> </label>
+                        </th>
+                        <th>
+                            <label asp-for="Employees.FirstOrDefault().Designation"> </label>
+                        </th>
+                        @*<th>
+                            <label asp-for="Employees.FirstOrDefault().PhotoPath"> </label>
+                        </th>*@
+                    <th>
+                        <label asp-for="Employees.FirstOrDefault().JoinDate"> </label>
+                        @*asp-format="{0:MM/dd/yyyy}"*@
+                    </th>
+                        <th>
+                            <label asp-for="Employees.FirstOrDefault().LastUpdated"> </label>
+                        </th>
+                    </tr>
+                    @foreach (var employee in Model.Employees)
+                    {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(m => employee.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => employee.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => employee.Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => employee.Designation)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(m => employee.PhotoPath)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(m => employee.JoinDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => employee.LastUpdated)
+                    </td>
+                    <td>
+                        <button asp-route-id="@employee.Id" asp-page-handler="Delete" onclick="return confirm('Are you sure to delete the record?')" class="btn btn-danger btn-sm">Delete</button>
+                        @*Passing primary key in asp-route-id *@
+                        <a asp-page="Edit" asp-route-id="@employee.Id" class="btn btn-success btn-sm text-white">Edit</a>
+                    </td>
+                </tr>
+                    }
+                </table>
+            }
+            else
+            {
+                <p>No Employees Available.</p>
+            }
+        </form>
+
+    </div>
+
+    @*<div class="col-12 border p-3">
+
+        <table id="DT_load" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th> Id</th>
+                    <th> Name</th>
+                    <th> Department</th>
+                    <th> Designation</th>
+                    <th> PhotoPath</th>
+                    <th> JoinDate</th>
+                    <th> LastUpdate</th>
+                </tr>
+            </thead>
+        </table>
+    </div>*@
+
+</div>
+@section Scripts{
+   @*<script src="~/js/employeeManagement.js"></script>*@
+}
